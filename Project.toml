@@ -1,0 +1,8 @@
+name = "JuliaReachTemplatePkg"
+uuid = "2b714139-d377-45b9-9f15-0355f7430025"
+version = "0.1.0"
+
+[deps]
+
+[compat]
+julia = "1"
