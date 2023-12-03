@@ -1,12 +1,8 @@
-# JuliaReachTemplatePkg.jl
+# NeuralNetworkReachability.jl
 
-`JuliaReachTemplatePkg` is a [Julia](http://julialang.org) template package for
-the JuliaReach ecosystem.
-
-## Library Outline
+[NeuralNetworkReachability.jl](http://github.com/JuliaReach/NeuralNetworkReachability.jl) is a
+[Julia](http://julialang.org) package for reachability analysis of artificial neural networks.
 
 ```@contents
-Pages = [
-]
-Depth = 2
+Pages = ["index.md"]
 ```

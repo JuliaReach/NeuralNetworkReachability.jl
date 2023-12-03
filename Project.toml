@@ -1,8 +1,19 @@
-name = "JuliaReachTemplatePkg"
-uuid = "2b714139-d377-45b9-9f15-0355f7430025"
+name = "NeuralNetworkReachability"
+uuid = "5de1e908-2f08-45bf-a571-ac88a54f7e7f"
 version = "0.1.0"
 
 [deps]
+ControllerFormats = "02ac4b2c-022a-44aa-84a5-ea45a5754bcc"
+LazySets = "b4f0291d-fe17-52bc-9479-3d1a343d9043"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+ReachabilityBase = "379f33d0-9447-4353-bd03-d664070e549f"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
-julia = "1"
+ControllerFormats = "0.2"
+LazySets = "2.11.1"
+ReachabilityBase = "0.2.1"
+Reexport = "0.2, 1"
+Requires = "0.5, 1"
+julia = "1.6"

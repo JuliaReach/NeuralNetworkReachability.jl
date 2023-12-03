@@ -1,15 +1,18 @@
-using Documenter, JuliaReachTemplatePkg
+using Documenter, NeuralNetworkReachability
 
-DocMeta.setdocmeta!(JuliaReachTemplatePkg, :DocTestSetup,
-                    :(using JuliaReachTemplatePkg); recursive=true)
+DocMeta.setdocmeta!(NeuralNetworkReachability, :DocTestSetup,
+                    :(using NeuralNetworkReachability); recursive=true)
 
-makedocs(; sitename="JuliaReachTemplatePkg.jl",
-         modules=[JuliaReachTemplatePkg],
+makedocs(; sitename="NeuralNetworkReachability.jl",
+         modules=[NeuralNetworkReachability],
          format=Documenter.HTML(; prettyurls=get(ENV, "CI", nothing) == "true",
-                                assets=["assets/aligned.css"]),
+                                collapselevel=1, assets=["assets/aligned.css"]),
+         pagesonly=true,
          pages=["Home" => "index.md",
-                "About" => "about.md"],
-         strict=true)
+                "Library" => Any["ForwardAlgorithms" => "lib/ForwardAlgorithms.md",
+                                 "BackwardAlgorithms" => "lib/BackwardAlgorithms.md",
+                                 "BidirectionalAlgorithms" => "lib/BidirectionalAlgorithms.md"],
+                "About" => "about.md"])
 
-deploydocs(; repo="github.com/JuliaReach/JuliaReachTemplatePkg.jl.git",
+deploydocs(; repo="github.com/JuliaReach/NeuralNetworkReachability.jl.git",
            push_preview=true)

@@ -19,3 +19,6 @@ docs/site/
 .vscode
 
 Manifest.toml
+
+*.pdf
+*.png
