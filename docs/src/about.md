@@ -13,7 +13,7 @@ If you like this package, consider contributing!
 
 [Creating an issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) in
 the
-[JuliaReachTemplatePkg GitHub issue tracker](https://github.com/JuliaReach/JuliaReachTemplatePkg.jl/issues)
+[NeuralNetworkReachability GitHub issue tracker](https://github.com/JuliaReach/NeuralNetworkReachability.jl/issues)
 to report a bug, open a discussion about existing functionality, or suggest new
 functionality is appreciated.
 
@@ -53,7 +53,7 @@ To run the unit tests locally, you can do:
 ```julia
 julia> using Pkg
 
-julia> Pkg.test("JuliaReachTemplatePkg")
+julia> Pkg.test("NeuralNetworkReachability")
 ```
 
 We also advise adding new unit tests when adding new features to ensure
@@ -86,7 +86,7 @@ $ julia --color=yes docs/make.jl
 
 ## Credits
 
-Here we list the names of the maintainers of the `JuliaReachTemplatePkg.jl`
+Here we list the names of the maintainers of the `NeuralNetworkReachability.jl`
 library, as well as past and present contributors (in alphabetic order).
 
 ### Core developers
