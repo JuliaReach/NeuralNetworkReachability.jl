@@ -40,4 +40,4 @@ end
     end
 end
 
-@test isempty(detect_ambiguities(NeuralNetworkReachability))
+include("Aqua.jl")
