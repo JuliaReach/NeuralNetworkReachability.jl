@@ -70,7 +70,6 @@ append_sets!(Xs, X::LazySet) = push!(Xs, X)
 append_sets!(Xs, X::UnionSetArray) = append!(Xs, array(X))
 
 # apply inverse piecewise-affine activation function to a union of sets
-# COV_EXCL_START
 for T in (:ReLU, :LeakyReLU)
     @eval begin
         function backward(Y::UnionSetArray, act::$T, algo::BackwardAlgorithm)
@@ -78,7 +77,6 @@ for T in (:ReLU, :LeakyReLU)
         end
     end
 end
-# COV_EXCL_STOP
 
 function _backward_union(Y::LazySet{N}, act::ActivationFunction,
                          algo::BackwardAlgorithm) where {N}
@@ -100,6 +98,15 @@ _inverse(x::AbstractVector, act::ActivationFunction) = [_inverse(xi, act) for xi
 _inverse(x::Number, ::ReLU) = x >= zero(x) ? x : zero(x)
 _inverse(x::Number, ::Sigmoid) = @. -log(1 / x - 1)
 _inverse(x::Number, act::LeakyReLU) = x >= zero(x) ? x : x / act.slope
+
+# invertible activations defined for numbers can be defined for singletons
+for T in (:Sigmoid, :LeakyReLU)
+    @eval begin
+        function backward(Y::Singleton, act::$T, algo::BackwardAlgorithm)
+            return Singleton(backward(element(Y), act, algo))
+        end
+    end
+end
 
 # activation functions must be explicitly supported for sets
 function backward(X::LazySet, act::ActivationFunction, algo::BackwardAlgorithm)

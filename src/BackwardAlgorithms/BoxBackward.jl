@@ -51,5 +51,10 @@ for T in (Sigmoid, LeakyReLU)
             h = _inverse(high(Y), act)
             return Hyperrectangle(; low=l, high=h)
         end
+
+        # disambiguation
+        function backward(Y::Singleton, act::$T, algo::BoxBackward)
+            return Singleton(backward(element(Y), act, algo))
+        end
     end
 end

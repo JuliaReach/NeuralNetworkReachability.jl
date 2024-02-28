@@ -363,6 +363,17 @@ end
     for algo in (BoxBackward(),)
         @test isequivalent(backward(Y, lr, algo), X)
     end
+
+    # default algorithm for union
+    for algo in (DummyBackward(),)
+        y1 = Singleton([2.0])
+        y2 = Singleton([3.0])
+        x1 = backward(y1, lr, algo)
+        x2 = backward(y2, lr, algo)
+        Y2 = UnionSetArray([y1, y2])
+        X2 = backward(Y2, lr, algo)
+        @test X2 == UnionSetArray([x1, x2])
+    end
 end
 
 @testset "Backward layer" begin

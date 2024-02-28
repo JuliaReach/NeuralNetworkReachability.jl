@@ -113,6 +113,10 @@ end
 
 # apply inverse ReLU activation function
 function backward(Y::LazySet, act::ReLU, ::PolyhedraBackward)
+    return _backward_PolyhedraBackward(Y, act)
+end
+
+function _backward_PolyhedraBackward(Y::LazySet, act::ReLU)
     n = dim(Y)
     if n == 1
         X = _backward_1D(Y, act)
@@ -347,6 +351,14 @@ end
 # disambiguation
 for T in (:ReLU, :LeakyReLU)
     @eval begin
+        function backward(Y::Singleton, act::$T, algo::PolyhedraBackward)
+            if all(>(0), element(Y))
+                return Singleton(backward(element(Y), act, algo))
+            else
+                return _backward_PolyhedraBackward(Y, act)
+            end
+        end
+
         function backward(Y::UnionSetArray, act::$T, algo::PolyhedraBackward)
             return _backward_union(Y, act, algo)
         end
