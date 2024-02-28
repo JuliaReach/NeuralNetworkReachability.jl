@@ -95,7 +95,7 @@ function backward(y::AbstractVector, act::ActivationFunction, ::BackwardAlgorith
 end
 
 _inverse(x::AbstractVector, act::ActivationFunction) = [_inverse(xi, act) for xi in x]
-_inverse(x::Number, ::ReLU) = x >= zero(x) ? x : zero(x)
+_inverse(x::Number, ::ReLU) = x > zero(x) ? x : throw(ArgumentError("ReLU cannot be inverted"))
 _inverse(x::Number, ::Sigmoid) = @. -log(1 / x - 1)
 _inverse(x::Number, act::LeakyReLU) = x >= zero(x) ? x : x / act.slope
 

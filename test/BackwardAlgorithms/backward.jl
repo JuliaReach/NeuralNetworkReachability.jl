@@ -210,8 +210,8 @@ end
         ## union is too complex -> only perform partial tests
         @test X ⊆ Y && low(X) == [-Inf, 1.0] && high(X) == [Inf, Inf]
         # union
-        Y = UnionSetArray([LineSegment([1.0, 1.0], [2.0, 2.0]), Singleton([0.0, 0.0])])
-        @test backward(Y, ReLU(), algo) == UnionSetArray([Y[1], Pneg])
+        Y = UnionSetArray([LineSegment([1.0, 1.0], [2.0, 2.0]), Singleton([1.0, 1.0])])
+        @test backward(Y, ReLU(), algo) == UnionSetArray([Y[1], Singleton([1.0, 1.0])])
 
         # 3D
         # positive point
