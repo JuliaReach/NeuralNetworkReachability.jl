@@ -210,8 +210,8 @@ end
         ## union is too complex -> only perform partial tests
         @test X ⊆ Y && low(X) == [-Inf, 1.0] && high(X) == [Inf, Inf]
         # union
-        Y = UnionSetArray([LineSegment([1.0, 1.0], [2.0, 2.0]), Singleton([0.0, 0.0])])
-        @test backward(Y, ReLU(), algo) == UnionSetArray([Y[1], Pneg])
+        Y = UnionSetArray([LineSegment([1.0, 1.0], [2.0, 2.0]), Singleton([1.0, 1.0])])
+        @test backward(Y, ReLU(), algo) == UnionSetArray([Y[1], Singleton([1.0, 1.0])])
 
         # 3D
         # positive point
@@ -362,6 +362,17 @@ end
     # exact algorithms (in this case)
     for algo in (BoxBackward(),)
         @test isequivalent(backward(Y, lr, algo), X)
+    end
+
+    # default algorithm for union
+    for algo in (DummyBackward(),)
+        y1 = Singleton([2.0])
+        y2 = Singleton([3.0])
+        x1 = backward(y1, lr, algo)
+        x2 = backward(y2, lr, algo)
+        Y2 = UnionSetArray([y1, y2])
+        X2 = backward(Y2, lr, algo)
+        @test X2 == UnionSetArray([x1, x2])
     end
 end
 
