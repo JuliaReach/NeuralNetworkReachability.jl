@@ -319,10 +319,12 @@ end
     x = [0.0, 1]
     y = Sigmoid()(x)
     Y = BallInf(y, 0.0)
+    Y2 = Singleton(y)
 
     # all algorithms
     for algo in (BoxBackward(), PolyhedraBackward(), DummyBackward())
         @test backward(y, Sigmoid(), algo) == x
+        @test isequivalent(backward(Y2, Sigmoid(), algo), Singleton(x))
     end
 
     # exact algorithms
