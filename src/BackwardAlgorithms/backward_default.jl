@@ -27,9 +27,9 @@ end
 remove_constraints!(::LazySet) = nothing
 
 function remove_constraints!(P::LazySets.HPoly)
-    m1 = length(P.constraints)
+    # m1 = length(P.constraints)
     remove_redundant_constraints!(P)
-    m2 = length(P.constraints)
+    # m2 = length(P.constraints)
     # println("$(m1 - m2)/$m1 constraints removed")
     return nothing
 end
