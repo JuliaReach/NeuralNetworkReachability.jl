@@ -8,7 +8,7 @@ include("example_networks.jl")
 end
 
 # load optional dependencies
-import ReachabilityAnalysis, Polyhedra, CDDLib, Optim
+import IntervalConstraintProgramming, ReachabilityAnalysis, Polyhedra, CDDLib, Optim
 
 @testset "ForwardAlgorithms" begin
     include("ForwardAlgorithms/forward.jl")
