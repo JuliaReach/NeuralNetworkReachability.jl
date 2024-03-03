@@ -19,5 +19,8 @@ LazyForward
 BoxForward
 SplitForward
 DeepZ
+AI2Box
+AI2Zonotope
+AI2Polytope
 Verisig
 ```
