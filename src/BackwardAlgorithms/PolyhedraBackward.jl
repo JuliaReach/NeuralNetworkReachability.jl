@@ -327,7 +327,7 @@ function _linear_map_inverse(d::AbstractVector{<:Number}, P::LazySet)
     end
     if has_undefs  # there were redundant constraints, so remove them
         constraints_MP = [constraints_MP[i]
-                          for i in 1:length(constraints_MP)
+                          for i in eachindex(constraints_MP)
                           if isassigned(constraints_MP, i)]
     end
     if isempty(constraints_MP)
