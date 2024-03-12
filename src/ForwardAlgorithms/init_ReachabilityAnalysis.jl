@@ -1,5 +1,6 @@
 # COV_EXCL_START
-using .ReachabilityAnalysis: @taylorize, TaylorIntegration, TaylorN, Taylor1
+using .ReachabilityAnalysis: @taylorize, TaylorIntegration, TaylorN, Taylor1, TaylorModelN,
+                             TMJets, IVP, BlackBoxContinuousSystem, solve, evaluate
 
 # Verisig helper functions (need to be defined in this separate file because of
 # the macro)

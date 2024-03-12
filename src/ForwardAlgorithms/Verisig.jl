@@ -41,9 +41,6 @@ end
 
 function load_Verisig()
     return quote
-        using .ReachabilityAnalysis: TMJets, IVP, BlackBoxContinuousSystem, solve, evaluate,
-                                     TaylorModelN
-
         function _Verisig_default_algorithm()
             return TMJets(; abstol=1e-14, orderQ=2, orderT=6)
         end
