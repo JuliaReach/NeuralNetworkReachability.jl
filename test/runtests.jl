@@ -10,6 +10,9 @@ end
 # load optional dependencies
 import IntervalConstraintProgramming, ReachabilityAnalysis, Polyhedra, CDDLib, Optim
 
+@testset "Util" begin
+    include("Util/Util.jl")
+end
 @testset "ForwardAlgorithms" begin
     include("ForwardAlgorithms/forward.jl")
 end
