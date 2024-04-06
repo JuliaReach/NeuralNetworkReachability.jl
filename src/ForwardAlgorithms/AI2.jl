@@ -111,3 +111,89 @@ function _forward_AI2_ReLU(X::LazySet{N}; meet, join) where {N}
     end
     return X
 end
+
+function forward(cs::ConvSet, L::MaxPoolingLayerOp, ::AI2Box)
+    _validate_Maxpool(cs, L)
+
+    m, n, r = cs.dims
+    p, q = window(L)
+    mp = div(m, p)
+    nq = div(n, q)
+    pq = p * q
+    Y = _forward_AI2_Maxpool_normalize(cs, L)
+    N = eltype(Y)
+    d = mp * nq * r
+    l = zeros(N, d)
+    h = zeros(N, d)
+    stop = 0
+    @inbounds for i in 1:d
+        start = stop + 1
+        stop = stop + pq
+        l[i] = maximum(low(Y, idx) for idx in start:stop)
+        h[i] = maximum(high(Y, idx) for idx in start:stop)
+    end
+    dims = (mp, nq, r)
+    return ConvSet(Hyperrectangle(; low=l, high=h), dims)
+end
+
+function forward(cs::ConvSet, L::MaxPoolingLayerOp, algo::AI2Zonotope)
+    _validate_Maxpool(cs, L)
+
+    throw(ArgumentError("the algorithm for AI2Zonotope is not implemented yet"))
+    Y = _forward_AI2_Maxpool_normalize(cs, L)
+    return _forward_AI2_Maxpool(Y, L; meet=_meet_zonotope, join=_join_zonotope(algo.join_algorithm))
+end
+
+function forward(cs::ConvSet, L::MaxPoolingLayerOp, ::AI2Polytope)
+    _validate_Maxpool(cs, L)
+
+    throw(ArgumentError("the algorithm for AI2Polytope is not implemented yet"))
+    Y = _forward_AI2_Maxpool_normalize(cs, L)
+    return _forward_AI2_Maxpool(Y, L; meet=_meet_polytope, join=_join_polytope)
+end
+
+function _validate_Maxpool(cs::ConvSet, L::MaxPoolingLayerOp)
+    p, q = window(L)
+    @assert mod(cs.dims[1], p) == 0 "incompatible pooling/set dimensions $m resp. $p"
+    @assert mod(cs.dims[2], q) == 0 "incompatible pooling/set dimensions $n resp. $q"
+end
+
+function _forward_AI2_Maxpool_normalize(cs::ConvSet, L::MaxPoolingLayerOp)
+    X = cs.set
+    m, n, r = cs.dims
+    d = dim(X)
+    p, q = window(L)
+    nq = div(n, q)
+    pq = p * q
+    rpq = r * pq
+    mn = m * n
+
+    # reorder dimensions
+    π = Vector{Int}(undef, d)
+    @inbounds for k in 1:r
+        for j in 1:n
+            for i in 1:m
+                row = rpq * (nq * floor(Int, (i − 1) / p) + floor(Int, (j − 1) / q)) +
+                      pq * (k − 1) + q * mod(i − 1, p) + mod(j − 1, q) + 1
+                # index for the reshaping used in the paper (depth-column-row)
+                # col = n * r * (i - 1) + r * (j - 1) + k
+                # index for the reshaping like with Julia's `vec` (row-column-depth)
+                col = mn * (k - 1) + m * (j - 1) + i
+                π[row] = col
+            end
+        end
+    end
+    return permute(X, π)
+end
+
+function _forward_AI2_Maxpool(X::LazySet, L::MaxPoolingLayerOp; meet, join)
+    # for each window compute the maximum value
+    for i in 1:(mp * nq * r)
+        if low(X, i) >= 0  # nonnegative case
+            # TODO
+        end
+    end
+
+    dims = (mp, nq, r)
+    return ConvSet(Y, dims)
+end

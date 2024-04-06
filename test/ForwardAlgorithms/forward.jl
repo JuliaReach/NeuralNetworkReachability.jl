@@ -453,3 +453,49 @@ end
     cs = ConvSet(S, dims)
     @test forward(cs, FlattenLayerOp()) == S
 end
+
+@testset "AI² max-pooling example" begin
+    L = MaxPoolingLayerOp(2, 2)
+    M = [0 1 3 -2; 2 -4 0 1; 2 -3 0 1; -1 5 2 3]
+    S_in = Singleton(vec(M))
+    dims_in = (4, 4, 1)
+    S_perm = Singleton([0, 1, 2, -4, 3, -2, 0, 1, 2, -3, -1, 5, 0, 1, 2, 3])
+    S_out = Singleton([2, 3, 5, 3])
+    dims_out = (2, 2, 1)
+    csS = ConvSet(S_in, dims_in)
+    csH = ConvSet(convert(Hyperrectangle, S_in), dims_in)
+    csZ = ConvSet(convert(Zonotope, S_in), dims_in)
+    csP = ConvSet(convert(HPolytope, S_in), dims_in)
+
+    # permutation
+    using NeuralNetworkReachability.ForwardAlgorithms: _forward_AI2_Maxpool_normalize
+    @test _forward_AI2_Maxpool_normalize(csS, L) == S_perm
+    @test isequivalent(_forward_AI2_Maxpool_normalize(csH, L), S_perm)
+    @test isequivalent(_forward_AI2_Maxpool_normalize(csZ, L), S_perm)
+    @test isequivalent(_forward_AI2_Maxpool_normalize(csP, L), S_perm)
+
+    # AI2Box
+    for cs in (csS, csH)
+        cs2 = forward(cs, L, AI2Box())
+        @test isequivalent(cs2.set, S_out)
+        @test cs2.dims == dims_out
+    end
+
+    # AI2Zonotope
+    for cs in (csS, csZ)
+        @test_throws ArgumentError forward(csS, L, AI2Zonotope())
+        continue
+        cs2 = forward(cs, L, AI2Zonotope())
+        @test isequivalent(cs2.set, S_out)
+        @test cs2.dims == dims_out
+    end
+
+    # AI2Polytope
+    for cs in (csS, csP)
+        @test_throws ArgumentError forward(csS, L, AI2Polytope())
+        continue
+        cs2 = forward(cs, L, AI2Polytope())
+        @test isequivalent(cs2.set, S_out)
+        @test cs2.dims == dims_out
+    end
+end
