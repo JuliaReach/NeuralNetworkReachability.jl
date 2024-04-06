@@ -3,12 +3,14 @@ module ForwardAlgorithms
 using ..Util
 using LinearAlgebra: Diagonal
 using ControllerFormats
+using ControllerFormats.Architecture: window
 using LazySets
 using LazySets: remove_zero_columns
 using ReachabilityBase.Arrays: SingleEntryVector
 using ReachabilityBase.Comparison: _isapprox, isapproxzero
 using ReachabilityBase.Require: require
 using Requires
+using ..Util
 
 export forward,
        DefaultForward,
