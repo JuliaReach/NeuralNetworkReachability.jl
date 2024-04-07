@@ -366,3 +366,10 @@ end
     # not supported yet
     @test_broken forward(X, N, Verisig())
 end
+
+@testset "Forward flattening layer" begin
+    S = Singleton(1:8)
+    dims = (2, 2, 2)
+    cs = ConvSet(S, dims)
+    @test forward(cs, FlattenLayerOp()) == S
+end

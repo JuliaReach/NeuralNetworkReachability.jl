@@ -1,5 +1,6 @@
 module ForwardAlgorithms
 
+using ..Util
 using LinearAlgebra: Diagonal
 using ControllerFormats
 using LazySets

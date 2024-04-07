@@ -11,7 +11,7 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
-ControllerFormats = "0.2"
+ControllerFormats = "0.2.3"
 LazySets = "2.13"
 LinearAlgebra = "<0.0.1, 1.6"
 ReachabilityBase = "0.2.1"
