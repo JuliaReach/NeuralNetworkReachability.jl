@@ -14,7 +14,7 @@ struct ConvSet{T<:LazySet}
 
     function ConvSet(set::T, dims::NTuple{3,Int}; validate=Val(true)) where {T}
         if validate isa Val{true} && (dim(set) != dims[1] * dims[2] * dims[3] ||
-           dims[1] <= 0 || dims[2] <= 0 || dims[3] <= 0)
+                                      dims[1] <= 0 || dims[2] <= 0 || dims[3] <= 0)
             throw(ArgumentError("invalid dimensions $(dim(set)) and $dims"))
         end
         return new{T}(set, dims)
