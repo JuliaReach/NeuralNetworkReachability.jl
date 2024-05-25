@@ -163,6 +163,71 @@ end
     end
 end
 
+@testset "Forward layer PolyZonoForward" begin
+    W = [1/2 -1/4; 0 1/2]  # second row is flipped in the paper
+    b = [-2.0, 1]
+    L = DenseLayerOp(W, b, ReLU())
+    x = [4.0, 0]
+    PZ = convert(SparsePolynomialZonotope, Hyperrectangle(x, [1.0, 2]))
+
+    @test forward(x, L, DefaultForward()) == [0.0, 1]
+
+    algo = PolyZonoForward(; reduced_order=4)
+
+    # affine map
+    PZ2 = forward(PZ, W, b, algo)
+    PZ3 = SparsePolynomialZonotope([0.0, 1], [0.5 -0.5; 0 1], zeros(Float64, 2, 0), [1 0; 0 1])
+    @test PZ2 == PZ3
+
+    # Id
+    @test forward(PZ, DenseLayerOp(W, b, Id()), algo) == PZ3
+
+    # ReLU with automatic quadratic approximation
+    PZ4 = forward(PZ, L, algo)
+    @test PZ4 == forward(PZ2, ReLU(), algo)
+
+    # ReLU with fixed quadratic approximation
+    mutable struct PaperQuadratic <: ForwardAlgorithms.QuadraticApproximation
+        count::Bool
+    end
+    function ForwardAlgorithms._polynomial_approximation(act, l, u, algo::PaperQuadratic)
+        if algo.count
+            algo.count = false
+            return (0.25, 0.5, 0.25)
+        else
+            return (0.0, 1.0, 0.0)
+        end
+    end
+    PZ5 = forward(PZ, L, PolyZonoForward(; polynomial_approximation=PaperQuadratic(true),
+                                           reduced_order=4))
+    @test PZ5 == SparsePolynomialZonotope([1/8, 1], [1/4 -1/4 1/16 1/16 -1/8; 0 1 0 0 0],
+                                          hcat([1/8, 0]), [1 0 2 0 1; 0 1 0 2 1])
+    # fixed approximation is more precise in this case
+    @test overapproximate(PZ5, Zonotope) ⊆ overapproximate(PZ4, Zonotope)
+
+    # ReLU for purely negative set
+    PZ = convert(SparsePolynomialZonotope, Hyperrectangle([-2.0, -2], [1.0, 1]))
+    PZ2 = forward(PZ, ReLU(), algo)
+    @test_broken isequivalent(PZ2, Singleton([0.0, 0]))  # not available, so check implicitly below
+    @test center(PZ2) == [0.0, 0] && isempty(genmat_dep(PZ2)) && isempty(genmat_indep(PZ2))
+    # ReLU for purely nonnegative set
+    PZ = convert(SparsePolynomialZonotope, Hyperrectangle([2.0, 2], [1.0, 1]))
+    @test PZ == forward(PZ, ReLU(), algo)
+
+    # ReLU with other approximations
+    PZ = convert(SparsePolynomialZonotope, Hyperrectangle(x, [1.0, 2]))
+    for (act, pa) in [(ReLU(), ForwardAlgorithms.ClosedFormQuadratic()),
+                      (Sigmoid(), ForwardAlgorithms.TaylorExpansionQuadratic()),
+                      (Tanh(), ForwardAlgorithms.TaylorExpansionQuadratic())]
+        algo2 = PolyZonoForward(; polynomial_approximation=pa, reduced_order=4)
+        @test_throws ArgumentError forward(PZ, DenseLayerOp(W, b, act), algo2)
+    end
+
+    # Sigmoid / Tanh
+    @test_throws ArgumentError forward(PZ, DenseLayerOp(W, b, Sigmoid()), algo)
+    @test_throws ArgumentError forward(PZ, DenseLayerOp(W, b, Tanh()), algo)
+end
+
 @testset "Forward network" begin
     W1 = [2.0 3; 4 5; 6 7]
     b1 = [1.0, 2, 3]

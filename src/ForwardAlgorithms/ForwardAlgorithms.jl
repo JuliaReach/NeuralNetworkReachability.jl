@@ -6,7 +6,7 @@ using ControllerFormats
 using LazySets
 using LazySets: remove_zero_columns
 using ReachabilityBase.Arrays: SingleEntryVector
-using ReachabilityBase.Comparison: _isapprox
+using ReachabilityBase.Comparison: _isapprox, isapproxzero
 using ReachabilityBase.Require: require
 using Requires
 
@@ -18,7 +18,8 @@ export forward,
        SplitForward,
        DeepZ,
        AI2Box, AI2Zonotope, AI2Polytope,
-       Verisig
+       Verisig,
+       PolyZonoForward
 
 include("ForwardAlgorithm.jl")
 include("DefaultForward.jl")
@@ -30,6 +31,7 @@ include("SplitForward.jl")
 include("DeepZ.jl")
 include("AI2.jl")
 include("Verisig.jl")
+include("PolyZonoForward.jl")
 
 include("init.jl")
 
