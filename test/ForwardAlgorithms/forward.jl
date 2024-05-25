@@ -198,10 +198,11 @@ end
             return (0.0, 1.0, 0.0)
         end
     end
-    PZ5 = forward(PZ, L, PolyZonoForward(; polynomial_approximation=PaperQuadratic(true),
-                                           reduced_order=4))
-    @test PZ5 == SparsePolynomialZonotope([1/8, 1], [1/4 -1/4 1/16 1/16 -1/8; 0 1 0 0 0],
-                                          hcat([1/8, 0]), [1 0 2 0 1; 0 1 0 2 1])
+    PZ5 = forward(PZ, L,
+                  PolyZonoForward(; polynomial_approximation=PaperQuadratic(true),
+                                  reduced_order=4))
+    @test PZ5 == SparsePolynomialZonotope([1 / 8, 1], [1/4 -1/4 1/16 1/16 -1/8; 0 1 0 0 0],
+                                          hcat([1 / 8, 0]), [1 0 2 0 1; 0 1 0 2 1])
     # fixed approximation is more precise in this case
     @test overapproximate(PZ5, Zonotope) ⊆ overapproximate(PZ4, Zonotope)
 

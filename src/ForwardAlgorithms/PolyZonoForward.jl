@@ -187,7 +187,7 @@ function _polynomial_image(c::N, G, GI, E, polynomial, ::QuadraticApproximation)
     Ḡ = _Ḡ(G, GI, h, q, a₁, N)
     Ǧ2(i) = [GI[i] * GI[j] for j in (i + 1):q]
     Ǧ = iszero(q) ? N[] :
-            vcat((0.5 * a₁) .* GI .^ 2, vcat([2 * a₁ * Ǧ2(i) for i in 1:(q - 1)]...))
+         vcat((0.5 * a₁) .* GI .^ 2, vcat([2 * a₁ * Ǧ2(i) for i in 1:(q - 1)]...))
 
     cq = a₁ * c^2 + a₂ * c + a₃
     if !isempty(GI)
