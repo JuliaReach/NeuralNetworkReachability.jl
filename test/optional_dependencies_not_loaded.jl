@@ -7,4 +7,9 @@ for dummy in [1]
         @test_throws AssertionError Verisig()
         @test_throws AssertionError forward(X, N, Verisig(nothing))
     end
+
+    # AI2Zonotope
+    if !isdefined(@__MODULE__, :IntervalConstraintProgramming)
+        @test_throws AssertionError forward(X, N, AI2Zonotope())
+    end
 end

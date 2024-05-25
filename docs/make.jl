@@ -11,7 +11,8 @@ makedocs(; sitename="NeuralNetworkReachability.jl",
          pages=["Home" => "index.md",
                 "Library" => Any["ForwardAlgorithms" => "lib/ForwardAlgorithms.md",
                                  "BackwardAlgorithms" => "lib/BackwardAlgorithms.md",
-                                 "BidirectionalAlgorithms" => "lib/BidirectionalAlgorithms.md"],
+                                 "BidirectionalAlgorithms" => "lib/BidirectionalAlgorithms.md",
+                                 "Util" => "lib/Util.md"],
                 "About" => "about.md"])
 
 deploydocs(; repo="github.com/JuliaReach/NeuralNetworkReachability.jl.git",

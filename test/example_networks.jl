@@ -13,3 +13,7 @@ function example_network_1221(act::ActivationFunction=ReLU())
                                DenseLayerOp([2.0 2.0; 2.0 2.0], [2.5, 2.5], act),
                                DenseLayerOp([3.0 3.0;], [3.5], Id())])
 end
+
+function example_network_AI2()
+    return FeedforwardNetwork([DenseLayerOp([2.0 -1.0; 0.0 1.0], [0.0, 0.0], ReLU())])
+end

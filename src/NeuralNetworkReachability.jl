@@ -2,6 +2,9 @@ module NeuralNetworkReachability
 
 using Reexport
 
+include("Util/Util.jl")
+@reexport using .Util
+
 include("ForwardAlgorithms/ForwardAlgorithms.jl")
 @reexport using .ForwardAlgorithms
 

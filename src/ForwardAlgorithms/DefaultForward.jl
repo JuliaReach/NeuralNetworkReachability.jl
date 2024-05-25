@@ -22,6 +22,11 @@ function forward(X::AbstractSingleton, net::FeedforwardNetwork, ::ForwardAlgorit
     return forward(X, net, DefaultForward())
 end
 
+# flattening a ConvSet just unwraps the set
+function forward(cs::ConvSet, ::FlattenLayerOp, ::ForwardAlgorithm=DefaultForward())
+    return cs.set
+end
+
 # propagate singleton through network and store all intermediate results
 function _forward_store(X::AbstractSingleton, net::FeedforwardNetwork,
                         algo::DefaultForward=DefaultForward())
