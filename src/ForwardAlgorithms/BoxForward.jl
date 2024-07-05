@@ -28,19 +28,10 @@ function forward(X::LazySet, ::ReLU, ::BoxForward)
 end
 
 # apply monotonic activation function
-for ACT in (:Sigmoid, :Tanh)
+for ACT in (:Sigmoid, :Tanh, :LeakyReLU)
     @eval function forward(X::LazySet, act::$ACT, ::BoxForward)
+        @assert isbounded(X) "this algorithm requires a bounded input set"
         l, h = extrema(X)
         return Hyperrectangle(; low=act(l), high=act(h))
-    end
-end
-
-# apply leaky-ReLU activation function
-function forward(X::LazySet, act::LeakyReLU, ::BoxForward)
-    l, h = extrema(X)
-    if !(any(isinf, l) || any(isinf, h))
-        return Hyperrectangle(; low=act(l), high=act(h))
-    else
-        error("not implemented")
     end
 end
