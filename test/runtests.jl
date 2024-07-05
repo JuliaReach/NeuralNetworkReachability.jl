@@ -1,6 +1,27 @@
 using Test, NeuralNetworkReachability
 using ControllerFormats, LazySets
 
+# auxiliary code to skip expensive tests
+begin
+    __test_short = haskey(ENV, "JULIA_PKGEVAL")
+
+    macro ts(arg)
+        if !__test_short
+            quote
+                $(esc(arg))
+            end
+        end
+    end
+
+    macro tv(v1, v2)
+        if __test_short
+            return v1
+        else
+            return @eval vcat($v1, $v2)
+        end
+    end
+end
+
 include("example_networks.jl")
 
 @testset "Optional dependencies (not loaded)" begin
@@ -8,7 +29,8 @@ include("example_networks.jl")
 end
 
 # load optional dependencies
-import IntervalConstraintProgramming, ReachabilityAnalysis, Polyhedra, CDDLib, Optim
+import Polyhedra, CDDLib, Optim
+@ts import IntervalConstraintProgramming, ReachabilityAnalysis
 
 @testset "Util" begin
     include("Util/Util.jl")
@@ -43,4 +65,4 @@ end
     end
 end
 
-include("Aqua.jl")
+@ts include("Aqua.jl")

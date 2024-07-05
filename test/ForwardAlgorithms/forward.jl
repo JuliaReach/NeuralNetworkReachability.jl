@@ -244,8 +244,8 @@ end
     @test forward(x, N, DefaultForward()) == [47.0, 94]
 
     # exact algorithms (in this case)
-    for algo in (ConcreteForward(), LazyForward(), BoxForward(),
-                 BoxForward(LazyForward()), DeepZ(), Verisig())
+    for algo in @tv [ConcreteForward(), LazyForward(), BoxForward(),
+                     BoxForward(LazyForward()), DeepZ()] [Verisig()]
         @test isequivalent(concretize(forward(X, N, algo)), Y)
     end
     # approximate algorithms
@@ -316,12 +316,12 @@ end
     end
 
     # algorithms not supporting ReLU activation
-    for algo in (DefaultForward(), Verisig())
+    @ts for algo in (DefaultForward(), Verisig())
         @test_throws ArgumentError forward(X, N, algo)
     end
 end
 
-@testset "AI² ReLU example" begin
+@ts @testset "AI² ReLU example" begin
     N = example_network_AI2()
     W = N.layers[1].weights
     b = N.layers[1].bias
@@ -371,7 +371,7 @@ end
     end
 
     # algorithms not supporting ReLU activation
-    for algo in (DefaultForward(), Verisig())
+    @ts for algo in (DefaultForward(), Verisig())
         @test_throws ArgumentError forward(X, N, algo)
     end
 
@@ -397,14 +397,16 @@ end
         end
 
         # Verisig result has a special type
-        Y = forward(X, N, Verisig())
-        if act == Sigmoid()
-            @test Y_exact ⊆ overapproximate(Y, Zonotope)
-        elseif act == Tanh()
-            # this is a known case where the algorithm is unsound
-            @test_broken Y_exact ⊆ overapproximate(Y, Zonotope)
-        else
-            error("unexpected case")
+        @ts begin
+            Y = forward(X, N, Verisig())
+            if act == Sigmoid()
+                @test Y_exact ⊆ overapproximate(Y, Zonotope)
+            elseif act == Tanh()
+                # this is a known case where the algorithm is unsound
+                @test_broken Y_exact ⊆ overapproximate(Y, Zonotope)
+            else
+                error("unexpected case")
+            end
         end
 
         # algorithms not supporting sigmoid activation
