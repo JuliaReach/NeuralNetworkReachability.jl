@@ -10,7 +10,7 @@ ReachabilityAnalysis = "1e97bd63-91d1-579d-8e8d-501d2b57c93f"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-Aqua = "0.8"
+Aqua = "0.8.9"
 CDDLib = "0.6 - 0.9"
 ControllerFormats = "0.2"
 IntervalConstraintProgramming = "0.9 - 0.13"
