@@ -86,7 +86,7 @@ end
 
 function _backward_pwa(Y::LazySet{N}, act::ActivationFunction,
                        ::PolyhedraBackward) where {N}
-    @assert is_polyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
+    @assert ispolyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
 
     out = LazySet{N}[]
     n = dim(Y)
@@ -158,7 +158,7 @@ end
 
 # apply inverse ReLU activation function to 2D polyhedron
 function _backward_2D(Y::LazySet{N}, ::ReLU) where {N}
-    @assert is_polyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
+    @assert ispolyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
 
     out = LazySet{N}[]
 
@@ -242,7 +242,7 @@ end
 # maps a linear constraint cx <= d to a new constraint whose normal vector is
 # [c1v1, c2v2, ...], and since v is a bitvector, it acts as a filter.
 function _backward_nD(Y::LazySet{N}, ::ReLU) where {N}
-    @assert is_polyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
+    @assert ispolyhedral(Y) "expected a polyhedron, got $(typeof(Y))"
 
     out = LazySet{N}[]
     n = dim(Y)
