@@ -34,7 +34,7 @@ struct TaylorExpansionQuadratic <: QuadraticApproximation end
     PolyZonoForward{A<:PolynomialApproximation,N,R} <: ForwardAlgorithm
 
 Forward algorithm based on poynomial zonotopes via polynomial approximation from
-[1].
+[Kochdumper0AB23](@citet).
 
 ### Fields
 
@@ -54,9 +54,6 @@ The default constructor takes keyword arguments with the following defaults:
 
 See the subtypes of `PolynomialApproximation` for available polynomial
 approximation methods.
-
-[1]: Kochdumper et al.: *Open- and closed-loop neural network verification using
-polynomial zonotopes*, NFM 2023.
 """
 struct PolyZonoForward{A<:PolynomialApproximation,O,R} <: ForwardAlgorithm
     polynomial_approximation::A

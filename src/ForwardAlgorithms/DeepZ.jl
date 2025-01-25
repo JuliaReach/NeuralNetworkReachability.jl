@@ -2,9 +2,7 @@
     DeepZ <: ForwardAlgorithm
 
 Forward algorithm based on zonotopes for ReLU, sigmoid, and tanh activation
-functions from [1].
-
-[1]: Singh et al.: *Fast and Effective Robustness Certification*, NeurIPS 2018.
+functions from [SinghGMPV18](@citet).
 """
 struct DeepZ <: ForwardAlgorithm end
 
