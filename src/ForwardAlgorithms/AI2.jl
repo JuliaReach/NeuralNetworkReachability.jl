@@ -2,15 +2,12 @@
     AI2Box <: AI2
 
 AI2 forward algorithm for ReLU activation functions based on abstract
-interpretation with the interval domain from [1].
+interpretation with the interval domain from [GehrMDTCV18](@citet).
 
 ### Notes
 
 This algorithm is less precise than [`BoxForward`](@ref) because it abstracts
 after every step, including the affine map.
-
-[1]: Gehr et al.: *AI²: Safety and robustness certification of neural networks
-with abstract interpretation*, SP 2018.
 """
 struct AI2Box <: ForwardAlgorithm end
 
@@ -18,15 +15,12 @@ struct AI2Box <: ForwardAlgorithm end
     AI2Zonotope <: AI2
 
 AI2 forward algorithm for ReLU activation functions based on abstract
-interpretation with the zonotope domain from [1].
+interpretation with the zonotope domain from [GehrMDTCV18](@citet).
 
 ### Fields
 
 - `join_algorithm` -- (optional; default: `"join"`) algorithm to compute the
                       join of two zonotopes
-
-[1]: Gehr et al.: *AI²: Safety and robustness certification of neural networks
-with abstract interpretation*, SP 2018.
 """
 struct AI2Zonotope{S} <: ForwardAlgorithm
     join_algorithm::S
@@ -39,10 +33,7 @@ AI2Zonotope() = AI2Zonotope("join")
     AI2Polytope <: AI2
 
 AI2 forward algorithm for ReLU activation functions based on abstract
-interpretation with the polytope domain from [1].
-
-[1]: Gehr et al.: *AI²: Safety and robustness certification of neural networks
-with abstract interpretation*, SP 2018.
+interpretation with the polytope domain from [GehrMDTCV18](@citet).
 """
 struct AI2Polytope <: ForwardAlgorithm end
 

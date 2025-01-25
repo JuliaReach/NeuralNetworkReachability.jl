@@ -1,7 +1,7 @@
 """
     Verisig{R} <: ForwardAlgorithm
 
-Forward algorithm for sigmoid and tanh activation functions from [1].
+Forward algorithm for sigmoid and tanh activation functions from [IvanovWAPL19](@citet).
 
 ### Fields
 
@@ -13,9 +13,6 @@ The implementation is known to be unsound in some cases.
 
 The implementation currently only supports neural networks with a single hidden
 layer.
-
-[1] Ivanov et al.: *Verisig: verifying safety properties of hybrid systems with
-neural network controllers*, HSCC 2019.
 """
 struct Verisig{R} <: ForwardAlgorithm
     algo::R
