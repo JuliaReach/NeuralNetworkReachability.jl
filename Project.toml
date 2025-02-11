@@ -12,9 +12,24 @@ Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
 ControllerFormats = "0.2.3"
+IntervalConstraintProgramming = "0.9 - 0.13"
 LazySets = "3, 4, 5"
 LinearAlgebra = "<0.0.1, 1.6"
+ReachabilityAnalysis = "0.22 - 0.27"
 ReachabilityBase = "0.2.1 - 0.3"
 Reexport = "0.2, 1"
 Requires = "0.5, 1"
 julia = "1.6"
+
+[extensions]
+ReachabilityAnalysisExt = "ReachabilityAnalysis"
+IntervalConstraintProgrammingExt = "IntervalConstraintProgramming"
+
+[extras]
+IntervalConstraintProgramming = "138f1668-1576-5ad7-91b9-7425abbf3153"
+ReachabilityAnalysis = "1e97bd63-91d1-579d-8e8d-501d2b57c93f"
+
+[weakdeps]
+IntervalConstraintProgramming = "138f1668-1576-5ad7-91b9-7425abbf3153"
+ReachabilityAnalysis = "1e97bd63-91d1-579d-8e8d-501d2b57c93f"
+Requires = "ae029012-a4dd-5104-9daa-d747884805df"
