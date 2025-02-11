@@ -8,7 +8,6 @@ using LazySets: remove_zero_columns
 using ReachabilityBase.Arrays: SingleEntryVector
 using ReachabilityBase.Comparison: _isapprox, isapproxzero
 using ReachabilityBase.Require: require
-using Requires
 
 export forward,
        DefaultForward,
