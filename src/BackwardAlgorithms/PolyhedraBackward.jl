@@ -5,7 +5,9 @@ Backward algorithm for piecewise-affine activations; uses a union of polyhedra.
 """
 struct PolyhedraBackward <: BackwardAlgorithm end
 
-remove_constraints(::PolyhedraBackward, X::LazySet) = true
+function remove_constraints(::PolyhedraBackward, X::LazySet)
+    return true
+end
 
 # apply inverse affine map to Y
 function backward(Y::LazySet, W::AbstractMatrix, b::AbstractVector,
