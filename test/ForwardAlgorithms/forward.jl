@@ -190,6 +190,7 @@ end
     mutable struct PaperQuadratic <: ForwardAlgorithms.QuadraticApproximation
         count::Bool
     end
+    @test ForwardAlgorithms._order(PaperQuadratic(true)) == 2
     function ForwardAlgorithms._polynomial_approximation(act, l, u, algo::PaperQuadratic)
         if algo.count
             algo.count = false
@@ -199,8 +200,7 @@ end
         end
     end
     PZ5 = forward(PZ, L,
-                  PolyZonoForward(; polynomial_approximation=PaperQuadratic(true),
-                                  reduced_order=4))
+                  PolyZonoForward(; polynomial_approximation=PaperQuadratic(true), reduced_order=4))
     @test PZ5 == SparsePolynomialZonotope([1 / 8, 1], [1/4 -1/4 1/16 1/16 -1/8; 0 1 0 0 0],
                                           hcat([1 / 8, 0]), [1 0 2 0 1; 0 1 0 2 1])
     # fixed approximation is more precise in this case
@@ -223,6 +223,18 @@ end
         algo2 = PolyZonoForward(; polynomial_approximation=pa, reduced_order=4)
         @test_throws ArgumentError forward(PZ, DenseLayerOp(W, b, act), algo2)
     end
+
+    # ReLU with default algorithm (not fully available yet)
+    mutable struct DummyApproximation <: ForwardAlgorithms.PolynomialApproximation end
+    ForwardAlgorithms._order(::DummyApproximation) = 1
+    ForwardAlgorithms._hq(::DummyApproximation, h, q) = (h, q)
+    @test_broken forward(PZ, ReLU(),
+                         PolyZonoForward(; polynomial_approximation=DummyApproximation(),
+                                         reduced_order=4))
+    PZ = convert(SparsePolynomialZonotope, Hyperrectangle([-2.0, -2], [1.0, 1]))
+    @test_broken forward(PZ, ReLU(),
+                         PolyZonoForward(; polynomial_approximation=DummyApproximation(),
+                                         reduced_order=4))
 
     # Sigmoid / Tanh
     @test_throws ArgumentError forward(PZ, DenseLayerOp(W, b, Sigmoid()), algo)

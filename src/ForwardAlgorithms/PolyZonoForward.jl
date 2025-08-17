@@ -8,7 +8,9 @@ abstract type PolynomialApproximation end
 abstract type QuadraticApproximation <: PolynomialApproximation end
 
 # order of quadratic polynomials
-_order(::QuadraticApproximation) = 2
+function _order(::QuadraticApproximation)
+    return 2
+end
 
 # output size of the generator matrices
 function _hq(::QuadraticApproximation, h, q)
@@ -166,6 +168,10 @@ end
 # Image of a polynomial zonotope under a polynomial function (Prop. 2) #
 ########################################################################
 
+function _polynomial_image(c::N, G, GI, E, polynomial, approx) where {N}
+    throw(ArgumentError("not implemented yet"))
+end
+
 function _Eq(E, h)
     Ê2(i) = [E[i] + E[j] for j in (i + 1):h]
     Ê = vcat(2 .* E, vcat([Ê2(i) for i in 1:(h - 1)]...))
@@ -198,7 +204,7 @@ function _polynomial_image(c::N, G, GI, E, polynomial, ::QuadraticApproximation)
 end
 
 # default for zero polynomial: fall back to standard implementation
-function _polynomial_image_zero(c, G, GI, E, approx)
+function _polynomial_image_zero(c::N, G, GI, E, approx) where {N}
     polynomial = zeros(N, _order(approx) + 1)
     return _polynomial_image(c, G, GI, E, polynomial, approx)
 end
