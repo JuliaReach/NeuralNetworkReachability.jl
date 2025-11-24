@@ -168,7 +168,7 @@ end
     b = [-2.0, 1]
     L = DenseLayerOp(W, b, ReLU())
     x = [4.0, 0]
-    PZ = convert(SparsePolynomialZonotope, Hyperrectangle(x, [1.0, 2]))
+    PZ = SparsePolynomialZonotope(x, [1.0 0; 0 2], zeros(Float64, 2, 0), [1 0; 0 1])
 
     @test forward(x, L, DefaultForward()) == [0.0, 1]
 
@@ -212,7 +212,11 @@ end
     @test_broken isequivalent(PZ2, Singleton([0.0, 0]))  # not available, so check implicitly below
     @test center(PZ2) == [0.0, 0] && isempty(genmat_dep(PZ2)) && isempty(genmat_indep(PZ2))
     # ReLU for purely nonnegative set
-    PZ = convert(SparsePolynomialZonotope, Hyperrectangle([2.0, 2], [1.0, 1]))
+    PZ = SparsePolynomialZonotope([2.0, 2], zeros(Float64, 2, 0), [1.0 0; 0 1], Matrix{Int}(undef, 0, 0))
+    PZ2 = forward(PZ, ReLU(), algo)
+    @test PZ.c == PZ2.c && size(PZ.E, 2) == size(PZ2.E, 2) == 0 && PZ.G == PZ2.G
+    @test PZ2.GI ∈ ([1.0 0; 0 1], [0.0 1; 1 0])
+    PZ = SparsePolynomialZonotope([2.0, 2], [1.0 0; 0 1], zeros(Float64, 2, 0), [1 0; 0 1])
     @test PZ == forward(PZ, ReLU(), algo)
 
     # ReLU with other approximations
