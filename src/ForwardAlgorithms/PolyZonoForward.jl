@@ -89,16 +89,19 @@ function forward(PZ::AbstractPolynomialZonotope{N}, act::ActivationFunction,
     c′ = zeros(N, n)
     G′ = Matrix{N}(undef, n, h′)
     GI′ = Matrix{N}(undef, n, q′)
-    E′ = Matrix{Int}(undef, n, h′)
     dl = zeros(N, n)
     du = zeros(N, n)
     # compute polynomial approximation for each neuron
     @inbounds for i in 1:n
-        c′[i], G′[i, :], GI′[i, :], E′[i, :], dl[i], du[i] = _forward_neuron(act, c[i],
-                                                                             @view(G[i, :]),
-                                                                             @view(GI[i, :]),
-                                                                             @view(E[i, :]), l[i],
-                                                                             u[i], algo)
+        c′[i], G′[i, :], GI′[i, :], dl[i], du[i] = _forward_neuron(act, c[i], @view(G[i, :]),
+                                                                   @view(GI[i, :]), l[i], u[i],
+                                                                   algo)
+    end
+    if iszero(size(E, 2))
+        # treat special case: no dependent generators
+        E′ = Matrix{Int}(undef, nparams(PZ), 0)
+    else
+        E′ = _polynomial_image_exponent_matrix(E, h, algo.polynomial_approximation)
     end
     PZ2 = SparsePolynomialZonotope(c′, G′, GI′, E′)
     PZ3 = minkowski_sum(PZ2, Hyperrectangle(; low=dl, high=du))
@@ -113,32 +116,32 @@ function forward(PZ::AbstractPolynomialZonotope, ::Id, algo::PolyZonoForward)
 end
 
 # ReLU neuron approximation: compute exact result if l >= 0 or u <= 0
-function _forward_neuron(act::ReLU, c::N, G, GI, E, l, u, algo::PolyZonoForward) where {N}
+function _forward_neuron(act::ReLU, c::N, G, GI, l, u, algo::PolyZonoForward) where {N}
     if u <= zero(N)
         # nonpositive -> 0
-        c, G, GI, E = _polynomial_image_zero(c, G, GI, E, algo.polynomial_approximation)
+        c, G, GI = _polynomial_image_zero(c, G, GI, algo.polynomial_approximation)
         dl, du = zero(N), zero(N)
-        return (c, G, GI, E, dl, du)
+        return (c, G, GI, dl, du)
     end
     if l >= zero(N)
         # nonnegative -> identity
-        c, G, GI, E = _polynomial_image_id(c, G, GI, E, algo.polynomial_approximation)
+        c, G, GI = _polynomial_image_id(c, G, GI, algo.polynomial_approximation)
         dl, du = zero(N), zero(N)
-        return (c, G, GI, E, dl, du)
+        return (c, G, GI, dl, du)
     end
-    return _forward_neuron_general(act, c, G, GI, E, l, u, algo)
+    return _forward_neuron_general(act, c, G, GI, l, u, algo)
 end
 
 # general neuron approximation
-function _forward_neuron(act::ActivationFunction, c, G, GI, E, l, u, algo::PolyZonoForward)
-    return _forward_neuron_general(act, c, G, GI, E, l, u, algo)
+function _forward_neuron(act::ActivationFunction, c, G, GI, l, u, algo::PolyZonoForward)
+    return _forward_neuron_general(act, c, G, GI, l, u, algo)
 end
 
-function _forward_neuron_general(act::ActivationFunction, c, G, GI, E, l, u, algo::PolyZonoForward)
+function _forward_neuron_general(act::ActivationFunction, c, G, GI, l, u, algo::PolyZonoForward)
     polynomial = _polynomial_approximation(act, l, u, algo.polynomial_approximation)
-    c′, G′, GI′, E′ = _polynomial_image(c, G, GI, E, polynomial, algo.polynomial_approximation)
+    c′, G′, GI′ = _polynomial_image(c, G, GI, polynomial, algo.polynomial_approximation)
     dl, du = _approximation_error(act, l, u, polynomial, algo.polynomial_approximation)
-    return (c′, G′, GI′, E′, dl, du)
+    return (c′, G′, GI′, dl, du)
 end
 
 #########################################
@@ -168,20 +171,14 @@ end
 # Image of a polynomial zonotope under a polynomial function (Prop. 2) #
 ########################################################################
 
-function _polynomial_image(c::N, G, GI, E, polynomial, approx) where {N}
+function _polynomial_image(c::N, G, GI, polynomial, approx) where {N}
     throw(ArgumentError("not implemented yet"))
-end
-
-function _Eq(E, h)
-    Ê2(i) = [E[i] + E[j] for j in (i + 1):h]
-    Ê = vcat(2 .* E, vcat([Ê2(i) for i in 1:(h - 1)]...))
-    return vcat(E, Ê)
 end
 
 _Ḡ(G, GI, h, q, a₁, N) = iszero(q) ? N[] : [2 * a₁ * G[i] * GI for i in 1:h]
 
 # quadratic polynomial
-function _polynomial_image(c::N, G, GI, E, polynomial, ::QuadraticApproximation) where {N}
+function _polynomial_image(c::N, G, GI, polynomial, ::QuadraticApproximation) where {N}
     h = length(G)
     q = length(GI)
     a₁, a₂, a₃ = polynomial
@@ -198,38 +195,36 @@ function _polynomial_image(c::N, G, GI, E, polynomial, ::QuadraticApproximation)
     end
     Gq = vcat(((2 * a₁ * c + a₂) * G), (a₁ * Ĝ))
     GIq = vcat((2 * a₁ * c + a₂) * GI, Ḡ, Ǧ)
-    Eq = _Eq(E, h)
 
-    return (cq, Gq, GIq, Eq)
+    return (cq, Gq, GIq)
 end
 
 # default for zero polynomial: fall back to standard implementation
-function _polynomial_image_zero(c::N, G, GI, E, approx) where {N}
+function _polynomial_image_zero(c::N, G, GI, approx) where {N}
     polynomial = zeros(N, _order(approx) + 1)
-    return _polynomial_image(c, G, GI, E, polynomial, approx)
+    return _polynomial_image(c, G, GI, polynomial, approx)
 end
 
 # image under quadratic zero polynomial
-function _polynomial_image_zero(::N, G, GI, E, approx::QuadraticApproximation) where {N}
+function _polynomial_image_zero(::N, G, GI, approx::QuadraticApproximation) where {N}
     h = length(G)
     q = length(GI)
     h′, q′ = _hq(approx, h, q)
     cq = zero(N)
     Gq = zeros(N, h′)
     GIq = zeros(N, q′)
-    Eq = _Eq(E, h)
-    return (cq, Gq, GIq, Eq)
+    return (cq, Gq, GIq)
 end
 
 # default for identity polynomial: fall back to standard implementation
-function _polynomial_image_id(c::N, G, GI, E, approx) where {N}
+function _polynomial_image_id(c::N, G, GI, approx) where {N}
     polynomial = zeros(N, _order(approx) + 1)
     polynomial[end - 1] = one(N)
-    return _polynomial_image(c, G, GI, E, polynomial, approx)
+    return _polynomial_image(c, G, GI, polynomial, approx)
 end
 
 # image under quadratic identity polynomial
-function _polynomial_image_id(c::N, G, GI, E, approx::QuadraticApproximation) where {N}
+function _polynomial_image_id(c::N, G, GI, approx::QuadraticApproximation) where {N}
     h = length(G)
     q = length(GI)
     h′, q′ = _hq(approx, h, q)
@@ -240,8 +235,17 @@ function _polynomial_image_id(c::N, G, GI, E, approx::QuadraticApproximation) wh
         Ḡ = _Ḡ(G, GI, h, q, zero(N), N)
         GIq = vcat(GI, Ḡ, zeros(N, q′ - q - h))
     end
-    Eq = _Eq(E, h)
-    return (c, Gq, GIq, Eq)
+    return (c, Gq, GIq)
+end
+
+function _polynomial_image_exponent_matrix(E, h, approx)
+    throw(ArgumentError("not implemented yet"))
+end
+
+function _polynomial_image_exponent_matrix(E, h, approx::QuadraticApproximation)
+    Êi(i) = hcat([E[:, i] + E[:, j] for j in (i + 1):h]...)
+    Ê = hcat([Êi(i) for i in 1:(h - 1)]...)
+    return hcat(E, 2 .* E, Ê)
 end
 
 ################################################################
