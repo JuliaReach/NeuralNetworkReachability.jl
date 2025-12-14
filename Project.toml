@@ -12,7 +12,7 @@ Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
 ControllerFormats = "0.2.3"
-LazySets = "3, 4, 5"
+LazySets = "3 - 6"
 LinearAlgebra = "<0.0.1, 1.6"
 ReachabilityBase = "0.2.1 - 0.3"
 Reexport = "0.2, 1"
