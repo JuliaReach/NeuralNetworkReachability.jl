@@ -310,7 +310,7 @@ end
 # d is a vector representing a diagonal matrix
 function _linear_map_inverse(d::AbstractVector{<:Number}, P::LazySet)
     constraints_P = constraints_list(P)
-    constraints_MP = LazySets._preallocate_constraints(constraints_P)
+    constraints_MP = _preallocate_constraints(constraints_P)  # NOTE: this is an internal function
     has_undefs = false
     N = promote_type(eltype(d), eltype(P))
     @inbounds for (i, c) in enumerate(constraints_P)

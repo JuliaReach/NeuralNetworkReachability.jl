@@ -26,7 +26,7 @@ end
 
 remove_constraints!(::LazySet) = nothing
 
-function remove_constraints!(P::LazySets.HPoly)
+function remove_constraints!(P::Union{HPolytope,HPolyhedron})
     # m1 = length(P.constraints)
     remove_redundant_constraints!(P)
     # m2 = length(P.constraints)
