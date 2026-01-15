@@ -1,6 +1,6 @@
 module NeuralNetworkReachability
 
-using Reexport
+using Reexport: @reexport
 
 include("Util/Util.jl")
 @reexport using .Util
