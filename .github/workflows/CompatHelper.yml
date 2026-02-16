@@ -23,7 +23,7 @@ jobs:
       - name: Run CompatHelper
         run: |
           julia -e 'import CompatHelper;
-            CompatHelper.main(; subdirs=["", "test"],
+            CompatHelper.main(; subdirs=["", "test", "docs"],
             bump_compat_containing_equality_specifier=false)'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
