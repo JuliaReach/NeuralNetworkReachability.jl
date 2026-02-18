@@ -5,9 +5,7 @@ import Aqua, ExplicitImports
     ignores = (:affine_map_inverse, :TaylorModelN, :_preallocate_constraints)
     @test isnothing(ExplicitImports.check_all_explicit_imports_are_public(NeuralNetworkReachability;
                                                                           ignore=ignores))
-    ignores = (:TaylorModelN,)
-    @test isnothing(ExplicitImports.check_all_explicit_imports_via_owners(NeuralNetworkReachability;
-                                                                          ignore=ignores))
+    @test isnothing(ExplicitImports.check_all_explicit_imports_via_owners(NeuralNetworkReachability))
     ignores = (:_preallocate_constraints,)
     @test isnothing(ExplicitImports.check_all_qualified_accesses_are_public(NeuralNetworkReachability;
                                                                             ignore=ignores))

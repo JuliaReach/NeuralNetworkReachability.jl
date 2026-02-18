@@ -30,7 +30,7 @@ end
 
 # load optional dependencies
 import Polyhedra, CDDLib, Optim
-@ts import IntervalConstraintProgramming, ReachabilityAnalysis
+@ts import IntervalConstraintProgramming, ReachabilityAnalysis, TaylorIntegration, TaylorModels
 
 @testset "Util" begin
     include("Util/Util.jl")
