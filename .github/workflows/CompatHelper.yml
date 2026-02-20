@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   CompatHelper:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Check if Julia is already available
         id: julia_in_path
@@ -23,7 +23,7 @@ jobs:
       - name: Run CompatHelper
         run: |
           julia -e 'import CompatHelper;
-            CompatHelper.main(; subdirs=["", "test"],
+            CompatHelper.main(; subdirs=["", "test", "docs"],
             bump_compat_containing_equality_specifier=false)'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
