@@ -7,17 +7,16 @@ using ControllerFormats: ActivationFunction, DenseLayerOp, FeedforwardNetwork,
                          layers
 using LazySets: AbstractHyperrectangle, AbstractPolynomialZonotope,
                 AbstractPolytope, AbstractSingleton, AbstractZonotope,
-                AffineMap, HalfSpace, Hyperrectangle, LazySet, Rectification,
-                Singleton, SparsePolynomialZonotope, UnionSetArray, Zonotope,
-                affine_map, array, box_approximation, center, concretize,
-                convex_hull, dim, element, expmat, genmat, genmat_dep,
-                genmat_indep, high, intersection, isbounded, linear_map, low,
-                minkowski_sum, ngens_dep, ngens_indep, nparams, overapproximate,
-                rectify, reduce_order, remove_redundant_generators, ×
+                HalfSpace, Hyperrectangle, LazySet, Rectification, Singleton,
+                SparsePolynomialZonotope, UnionSetArray, Zonotope, affine_map,
+                array, box_approximation, center, concretize, convex_hull, dim,
+                element, expmat, genmat, genmat_dep, genmat_indep, high,
+                intersection, isbounded, linear_map, low, minkowski_sum,
+                ngens_dep, ngens_indep, nparams, overapproximate, rectify,
+                reduce_order, remove_redundant_generators
 using ReachabilityBase.Arrays: SingleEntryVector, remove_zero_columns
 using ReachabilityBase.Comparison: _isapprox, isapproxzero
 using ReachabilityBase.Require: require
-using Requires: @require
 
 export forward,
        DefaultForward,
