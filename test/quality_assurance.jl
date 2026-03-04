@@ -6,7 +6,8 @@ import Aqua, ExplicitImports
     @test isnothing(ExplicitImports.check_all_explicit_imports_are_public(NeuralNetworkReachability;
                                                                           ignore=ignores))
     @test isnothing(ExplicitImports.check_all_explicit_imports_via_owners(NeuralNetworkReachability))
-    ignores = (:_default_algorithm_Verisig, :_forward_Verisig)  # false positive due to package extensions
+    # false positive due to package extensions:
+    ignores = (:_ext_constructor_Verisig, :_ext_forward_AI2Zonotope, :_ext_forward_Verisig)
     @test isnothing(ExplicitImports.check_all_qualified_accesses_are_public(NeuralNetworkReachability;
                                                                             ignore=ignores))
     @test isnothing(ExplicitImports.check_all_qualified_accesses_via_owners(NeuralNetworkReachability))

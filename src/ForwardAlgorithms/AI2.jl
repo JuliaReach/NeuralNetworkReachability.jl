@@ -70,13 +70,13 @@ end
 
 # zonotope: intersection the zonotope overapproximation of all pairwise projected intersections
 function forward(Z::AbstractZonotope, ::ReLU, algo::AI2Zonotope)
-    _load_IntervalConstraintProgramming(nothing)
+    _ext_forward_AI2Zonotope(nothing)
 
     return _forward_AI2_ReLU(Z; meet=_meet_zonotope, join=_join_zonotope(algo.join_algorithm))
 end
 
 # defined in `IntervalConstraintProgrammingExt.jl`
-function _load_IntervalConstraintProgramming(::Any)
+function _ext_forward_AI2Zonotope(::Any)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :IntervalConstraintProgrammingExt) : @__MODULE__
     require(mod, :IntervalConstraintProgramming; fun_name="forward", explanation="with AI2Zonotope")

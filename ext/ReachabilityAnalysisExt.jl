@@ -53,11 +53,11 @@ end
 
 # COV_EXCL_STOP
 
-function ForwardAlgorithms._default_algorithm_Verisig(::Nothing)
+function ForwardAlgorithms._ext_constructor_Verisig(::Nothing)
     return TMJets(; abstol=1e-14, orderQ=2, orderT=6)
 end
 
-function ForwardAlgorithms._forward_Verisig(X::LazySet, net::FeedforwardNetwork, algo::Verisig)
+function ForwardAlgorithms._ext_forward_Verisig(X::LazySet, net::FeedforwardNetwork, algo::Verisig)
     @assert algo.algo isa TMJets "reachability algorithm of type " *
                                  "$(typeof(algo.algo)) is not supported"
     xᴾ = X
