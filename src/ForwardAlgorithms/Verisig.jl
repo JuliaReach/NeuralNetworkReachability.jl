@@ -20,11 +20,11 @@ end
 
 # default constructor
 function Verisig()
-    algo = _default_algorithm_Verisig(nothing)
+    algo = _ext_constructor_Verisig(nothing)
     return Verisig(algo)
 end
 
-function _default_algorithm_Verisig(::Any)
+function _ext_constructor_Verisig(::Any)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :ReachabilityAnalysisExt) : @__MODULE__
     require(mod, :ReachabilityAnalysis; fun_name="Verisig")
@@ -32,10 +32,10 @@ function _default_algorithm_Verisig(::Any)
 end
 
 function forward(X::LazySet, net::FeedforwardNetwork, algo::Verisig)
-    return _forward_Verisig(X, net, algo)
+    return _ext_forward_Verisig(X, net, algo)
 end
 
-function _forward_Verisig(X, net, algo)
+function _ext_forward_Verisig(X, net, algo)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :ReachabilityAnalysisExt) : @__MODULE__
     require(mod, :ReachabilityAnalysis; fun_name="forward")
