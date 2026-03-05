@@ -68,7 +68,7 @@ function forward(H::AbstractHyperrectangle, ::ReLU, ::AI2Box)
     return rectify(H)
 end
 
-# zonotope: intersection the zonotope overapproximation of all pairwise projected intersections
+# zonotope: zonotope overapproximation of all pairwise projected intersections
 function forward(Z::AbstractZonotope, ::ReLU, algo::AI2Zonotope)
     _ext_forward_AI2Zonotope(nothing)
 
