@@ -159,12 +159,12 @@ end
 
 # ReLU activation function: closed-form expression
 function _polynomial_approximation(::ReLU, l, u, ::ClosedFormQuadratic)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 # sigmoid and tanh activation functions: Taylor-series expansion
 function _polynomial_approximation(::Union{Sigmoid,Tanh}, l, u, ::TaylorExpansionQuadratic)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 ########################################################################
@@ -172,7 +172,7 @@ end
 ########################################################################
 
 function _polynomial_image(c::N, G, GI, polynomial, approx) where {N}
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 _Ḡ(G, GI, h, q, a₁, N) = iszero(q) ? N[] : [2 * a₁ * G[i] * GI for i in 1:h]
@@ -187,7 +187,7 @@ function _polynomial_image(c::N, G, GI, polynomial, ::QuadraticApproximation) wh
     Ḡ = _Ḡ(G, GI, h, q, a₁, N)
     Ǧ2(i) = [GI[i] * GI[j] for j in (i + 1):q]
     Ǧ = iszero(q) ? N[] :
-         vcat((0.5 * a₁) .* GI .^ 2, vcat([2 * a₁ * Ǧ2(i) for i in 1:(q - 1)]...))
+        vcat((0.5 * a₁) .* GI .^ 2, vcat([2 * a₁ * Ǧ2(i) for i in 1:(q - 1)]...))
 
     cq = a₁ * c^2 + a₂ * c + a₃
     if !isempty(GI)
@@ -239,7 +239,7 @@ function _polynomial_image_id(c::N, G, GI, approx::QuadraticApproximation) where
 end
 
 function _polynomial_image_exponent_matrix(E, h, approx)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 function _polynomial_image_exponent_matrix(E, h, approx::QuadraticApproximation)
@@ -288,5 +288,5 @@ end
 # sigmoid and tanh activation functions
 function _approximation_error(::Union{Sigmoid,Tanh}, l::N, u::N, polynomial,
                               ::PolynomialApproximation) where {N}
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
