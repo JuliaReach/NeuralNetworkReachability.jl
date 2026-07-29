@@ -287,7 +287,7 @@ end
         x = Singleton([1.0, 1.0])
 
         # forward with singleton
-        yv = forward(element(x), N)
+        yv = forward(center(x), N)
         @test yv == y
         for algo in (DefaultForward(), ConcreteForward(), LazyForward(),
                      BoxForward(), BoxForward(LazyForward()),
@@ -298,7 +298,7 @@ end
 
         # _forward_store with singleton
         using NeuralNetworkReachability.ForwardAlgorithms: _forward_store
-        yv = _forward_store(element(x), N, DefaultForward())
+        yv = _forward_store(center(x), N, DefaultForward())
         @test length(yv) == length(N)
         @test yv[end][2] == y
         for algo in (DefaultForward(), ConcreteForward(), LazyForward(),

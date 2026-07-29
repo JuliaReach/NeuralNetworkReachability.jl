@@ -54,7 +54,7 @@ for T in (Sigmoid, LeakyReLU)
 
         # disambiguation
         function backward(Y::Singleton, act::$T, algo::BoxBackward)
-            return Singleton(backward(element(Y), act, algo))
+            return Singleton(backward(center(Y), act, algo))
         end
     end
 end

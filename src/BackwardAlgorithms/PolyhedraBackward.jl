@@ -151,10 +151,10 @@ end
 
 # more efficient special case for Interval
 function _backward_1D(Y::Interval{N}, ::ReLU) where {N}
-    if !_leq(min(Y), zero(N))
+    if !_leq(low(Y, 1), zero(N))
         return Y
     else
-        return HalfSpace(N[1], max(Y))
+        return HalfSpace(N[1], high(Y, 1))
     end
 end
 
@@ -354,8 +354,8 @@ end
 for T in (:ReLU, :LeakyReLU)
     @eval begin
         function backward(Y::Singleton, act::$T, algo::PolyhedraBackward)
-            if all(>(0), element(Y))
-                return Singleton(backward(element(Y), act, algo))
+            if all(>(0), center(Y))
+                return Singleton(backward(center(Y), act, algo))
             else
                 return _backward_PolyhedraBackward(Y, act)
             end
