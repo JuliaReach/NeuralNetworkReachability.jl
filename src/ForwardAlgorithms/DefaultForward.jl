@@ -13,7 +13,7 @@ end
 # propagate singleton through network
 function forward(X::AbstractSingleton, net::FeedforwardNetwork,
                  algo::DefaultForward=DefaultForward())
-    x = element(X)
+    x = center(X)
     y = forward(x, net, algo)
     return Singleton(y)
 end
@@ -30,7 +30,7 @@ end
 # propagate singleton through network and store all intermediate results
 function _forward_store(X::AbstractSingleton, net::FeedforwardNetwork,
                         algo::DefaultForward=DefaultForward())
-    x = element(X)
+    x = center(X)
     results = _forward_store(x, net, algo)
     return [(Singleton(y), Singleton(z)) for (y, z) in results]
 end

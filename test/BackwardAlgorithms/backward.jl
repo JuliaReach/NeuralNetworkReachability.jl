@@ -26,7 +26,7 @@ end
         x = [1.0]
         X = Singleton(x)
         Y = affine_map(W, X, b)
-        y = element(Y)
+        y = center(Y)
         @test backward(y, W, b, algo) == x
         @test isequivalent(backward(Y, W, b, algo), X)
         # non-polytope

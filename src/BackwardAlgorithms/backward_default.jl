@@ -103,7 +103,7 @@ _inverse(x::Number, act::LeakyReLU) = x >= zero(x) ? x : x / act.slope
 for T in (:Sigmoid, :LeakyReLU)
     @eval begin
         function backward(Y::Singleton, act::$T, algo::BackwardAlgorithm)
-            return Singleton(backward(element(Y), act, algo))
+            return Singleton(backward(center(Y), act, algo))
         end
     end
 end
