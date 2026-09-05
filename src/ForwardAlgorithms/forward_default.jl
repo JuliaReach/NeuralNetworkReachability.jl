@@ -43,8 +43,8 @@ end
 
 # activation functions must be explicitly supported for sets
 function forward(X::LazySet, act::ActivationFunction, algo::ForwardAlgorithm)
-    throw(ArgumentError("activation function $act not supported by algorithm " *
-                        "$algo for set type $(typeof(X))"))
+    return throw(ArgumentError("activation function $act not supported by algorithm " *
+                               "$algo for set type $(typeof(X))"))
 end
 
 # identity activation is automatically supported for sets
