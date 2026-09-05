@@ -365,7 +365,9 @@ end
     # network with ReLU activation
     @test isequivalent(forward(H, N, AI2Box()), Hyperrectangle(; low=[0.0, 1.0], high=[3.0, 3.0]))
     # zonotope implementation is less precise than in the paper
-    @test ⊆(Zonotope([0.5, 2.0], [0.5 0.5 -0.5; 0.0 0.5 0.5]), forward(Z, N, AI2Zonotope()))  # TODO reactivate when ICP is fixed
+    # TODO temporarily deactivated due to error in IntervalConstraintProgramming
+    #      (https://github.com/JuliaIntervals/ReversePropagation.jl/issues/86)
+    # @test ⊆(Zonotope([0.5, 2.0], [0.5 0.5 -0.5; 0.0 0.5 0.5]), forward(Z, N, AI2Zonotope()))
     @test isequivalent(forward(P, N, AI2Polytope()),
                        VPolygon([[0.0, 3.0], [0.0, 1.0], [1.0, 1.0], [2.0, 2.0]]))
 end
