@@ -7,7 +7,7 @@ struct DefaultForward <: ForwardAlgorithm end
 
 # propagating set through network not supported (exception below)
 function forward(::LazySet, ::FeedforwardNetwork, algo::DefaultForward)
-    throw(ArgumentError("cannot apply $(typeof(algo)) to a set input"))
+    return throw(ArgumentError("cannot apply $(typeof(algo)) to a set input"))
 end
 
 # propagate singleton through network

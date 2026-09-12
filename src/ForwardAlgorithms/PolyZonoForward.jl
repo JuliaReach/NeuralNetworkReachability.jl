@@ -159,12 +159,12 @@ end
 
 # ReLU activation function: closed-form expression
 function _polynomial_approximation(::ReLU, l, u, ::ClosedFormQuadratic)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 # sigmoid and tanh activation functions: Taylor-series expansion
 function _polynomial_approximation(::Union{Sigmoid,Tanh}, l, u, ::TaylorExpansionQuadratic)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 ########################################################################
@@ -172,7 +172,7 @@ end
 ########################################################################
 
 function _polynomial_image(c::N, G, GI, polynomial, approx) where {N}
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 _Ḡ(G, GI, h, q, a₁, N) = iszero(q) ? N[] : [2 * a₁ * G[i] * GI for i in 1:h]
@@ -239,7 +239,7 @@ function _polynomial_image_id(c::N, G, GI, approx::QuadraticApproximation) where
 end
 
 function _polynomial_image_exponent_matrix(E, h, approx)
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end
 
 function _polynomial_image_exponent_matrix(E, h, approx::QuadraticApproximation)
@@ -288,5 +288,5 @@ end
 # sigmoid and tanh activation functions
 function _approximation_error(::Union{Sigmoid,Tanh}, l::N, u::N, polynomial,
                               ::PolynomialApproximation) where {N}
-    throw(ArgumentError("not implemented yet"))
+    return throw(ArgumentError("not implemented yet"))
 end

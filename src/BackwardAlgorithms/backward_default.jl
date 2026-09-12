@@ -110,8 +110,8 @@ end
 
 # activation functions must be explicitly supported for sets
 function backward(X::LazySet, act::ActivationFunction, algo::BackwardAlgorithm)
-    throw(ArgumentError("activation function $act not supported by algorithm " *
-                        "$algo for set type $(typeof(X))"))
+    return throw(ArgumentError("activation function $act not supported by algorithm " *
+                               "$algo for set type $(typeof(X))"))
 end
 
 # disambiguation: apply inverse identity activation function to Y
