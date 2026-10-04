@@ -4,6 +4,7 @@
 end
 
 @static if !isdefined(Base, :get_extension)
+    # COV_EXCL_START
     function __init__()
         @require IntervalConstraintProgramming = "138f1668-1576-5ad7-91b9-7425abbf3153" begin
             include("../../ext/IntervalConstraintProgrammingExt.jl")
@@ -17,4 +18,5 @@ end
             end
         end
     end
+    # COV_EXCL_STOP
 end
