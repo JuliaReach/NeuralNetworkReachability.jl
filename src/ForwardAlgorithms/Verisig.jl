@@ -28,7 +28,7 @@ function _ext_constructor_Verisig(::Any)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :ReachabilityAnalysisExt) : @__MODULE__
     require(mod, :ReachabilityAnalysis; fun_name="Verisig")
-    return nothing
+    return nothing  # COV_EXCL_LINE
 end
 
 function forward(X::LazySet, net::FeedforwardNetwork, algo::Verisig)
@@ -39,7 +39,7 @@ function _ext_forward_Verisig(X, net, algo)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :ReachabilityAnalysisExt) : @__MODULE__
     require(mod, :ReachabilityAnalysis; fun_name="forward")
-    return nothing
+    return nothing  # COV_EXCL_LINE
 end
 
 # disambiguation for singleton

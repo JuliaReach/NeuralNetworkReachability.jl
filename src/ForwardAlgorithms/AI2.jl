@@ -80,7 +80,7 @@ function _ext_forward_AI2Zonotope(::Any)
     mod = isdefined(Base, :get_extension) ?
           Base.get_extension(@__MODULE__, :IntervalConstraintProgrammingExt) : @__MODULE__
     require(mod, :IntervalConstraintProgramming; fun_name="forward", explanation="with AI2Zonotope")
-    return nothing
+    return nothing  # COV_EXCL_LINE
 end
 
 # polytope: the convex hull of all pairwise polytopes

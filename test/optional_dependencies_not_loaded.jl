@@ -11,5 +11,6 @@ for dummy in [1]
     # AI2Zonotope
     if !isdefined(@__MODULE__, :IntervalConstraintProgramming)
         @test_throws AssertionError forward(X, N, AI2Zonotope())
+        @test_throws AssertionError ForwardAlgorithms._ext_forward_AI2Zonotope(nothing)
     end
 end
