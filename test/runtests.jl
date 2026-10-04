@@ -24,13 +24,17 @@ end
 
 include("example_networks.jl")
 
-@testset "Optional dependencies (not loaded)" begin
+@testset "Warning about missing optional dependencies" begin
     include("optional_dependencies_not_loaded.jl")
 end
 
 # load optional dependencies
 import Polyhedra, CDDLib, Optim
 @ts import IntervalConstraintProgramming, ReachabilityAnalysis, TaylorIntegration, TaylorModels
+
+@testset "Additional code for optional dependencies" begin
+    @test isnothing(ForwardAlgorithms._ext_forward_AI2Zonotope(nothing))
+end
 
 @testset "Util" begin
     include("Util/Util.jl")
