@@ -5,7 +5,7 @@ using LinearAlgebra: Diagonal
 using ControllerFormats: ActivationFunction, DenseLayerOp, FeedforwardNetwork,
                          FlattenLayerOp, Id, LeakyReLU, ReLU, Sigmoid, Tanh,
                          layers
-using LazySets: AbstractHyperrectangle, AbstractPolynomialZonotope,
+using LazySets: AbstractHyperrectangle, AbstractSparsePolynomialZonotope,
                 AbstractPolytope, AbstractSingleton, AbstractZonotope,
                 HalfSpace, Hyperrectangle, LazySet, Rectification, Singleton,
                 SparsePolynomialZonotope, UnionSetArray, Zonotope, affine_map,
