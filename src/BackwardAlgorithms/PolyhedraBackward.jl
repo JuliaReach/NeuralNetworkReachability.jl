@@ -366,3 +366,7 @@ for T in (:ReLU, :LeakyReLU)
         end
     end
 end
+
+function _backward_PolyhedraBackward(Y::LazySet, act::LeakyReLU)
+    return throw(ArgumentError("not implemented yet"))
+end
