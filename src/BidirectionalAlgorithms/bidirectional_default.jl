@@ -1,6 +1,6 @@
 # propagate X forward and Y backward through network
 function bidirectional(X, Y, net::FeedforwardNetwork,
-                       algo::BidirectionalAlgorithm=SimpleBidirectional();
+                       algo::BidirectionalAlgorithm;
                        get_intermediate_results::Bool=false)
     # forward propagation
     forward_results = _forward_store(X, net, fwd(algo))
