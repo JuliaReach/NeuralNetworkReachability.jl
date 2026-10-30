@@ -1,6 +1,6 @@
 # propagate X forward and Y backward through network
 function bidirectional(X, Y, net::FeedforwardNetwork,
-                       algo::BidirectionalAlgorithm=SimpleBidirectional();
+                       algo::BidirectionalAlgorithm;
                        get_intermediate_results::Bool=false)
     # forward propagation
     forward_results = _forward_store(X, net, fwd(algo))
@@ -11,6 +11,10 @@ function bidirectional(X, Y, net::FeedforwardNetwork,
             intermediate_results[k + 1] = forward_results[k][2]
         end
         fill_result = 1
+    else
+        # this block is not needed but helps JET inference
+        intermediate_results = Vector{LazySet}(undef, 0)
+        fill_result = 0
     end
 
     bwd_algo = bwd(algo)

@@ -336,7 +336,7 @@ function _linear_map_inverse(d::AbstractVector{<:Number}, P::LazySet)
         # in the current usage, each dimension is constrained and d is nonzero, so
         # at least one constraint must remain
         # COV_EXCL_START
-        return Universe{N}(size(A, 2))
+        return Universe{N}(length(d))
         # COV_EXCL_STOP
     end
     return HPolyhedron(constraints_MP)
@@ -365,4 +365,8 @@ for T in (:ReLU, :LeakyReLU)
             return _backward_union(Y, act, algo)
         end
     end
+end
+
+function _backward_PolyhedraBackward(Y::LazySet, act::LeakyReLU)
+    return throw(ArgumentError("not implemented yet"))
 end

@@ -75,7 +75,7 @@ function forward(PZ, W::AbstractMatrix, b::AbstractVector, ::PolyZonoForward)
 end
 
 # apply activation function (Algorithm 1)
-function forward(PZ::AbstractPolynomialZonotope{N}, act::ActivationFunction,
+function forward(PZ::AbstractSparsePolynomialZonotope{N}, act::ActivationFunction,
                  algo::PolyZonoForward) where {N}
     n = dim(PZ)
     c = center(PZ)
@@ -111,7 +111,7 @@ function forward(PZ::AbstractPolynomialZonotope{N}, act::ActivationFunction,
 end
 
 # disambiguation for identity activation function
-function forward(PZ::AbstractPolynomialZonotope, ::Id, algo::PolyZonoForward)
+function forward(PZ::AbstractSparsePolynomialZonotope, ::Id, algo::PolyZonoForward)
     return PZ
 end
 
